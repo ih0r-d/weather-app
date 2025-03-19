@@ -1,7 +1,9 @@
+import Weather from "./components/Weather.tsx";
+
 const App = () => {
     return (
         <div className="app">
-            Whether app
+            <Weather/>
         </div>
     )
 }
