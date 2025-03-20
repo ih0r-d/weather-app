@@ -7,13 +7,14 @@ interface Props {
     temperature: number;
     location: string;
     icon: string;
+    onClick: () => void
 
 }
 
-const DetailsView = ({humidity, windSpeed, location,temperature,icon}: Props) => {
+const DetailsView = ({humidity, windSpeed, location,temperature,icon,onClick}: Props) => {
     return (
         <>
-            <Image src={icon} alt="" className="weather-icon"/>
+            <Image src={icon} alt="" className="weather-icon" onClick={onClick}/>
             <p className="temperature">{temperature}&deg;C</p>
             <p className="location">{location}</p>
             <div className="weather-data">
