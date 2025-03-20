@@ -13,9 +13,9 @@ const SearchBox = ({ placeholder, boxClassName, imgSrc, imgClassName, onClick }:
     const inputRef = useRef<HTMLInputElement | null>(null);
 
     const handleClick = () => {
-        const inputValue = inputRef.current?.value.trim(); // Отримуємо значення
+        const inputValue = inputRef.current?.value.trim();
         if (inputValue) {
-            onClick(inputValue); // Викликаємо searchByCity
+            onClick(inputValue);
         }
     };
 

@@ -1,8 +1,9 @@
 import processedImages from "../utils/imageLoader";
-import './Weather.css'
+import "./Weather.css";
 import SearchBox from "./SearchBox.tsx";
 import DetailsView from "./DetailsView.tsx";
-import { useState } from "react";
+import { useState, useCallback, useRef } from "react";
+import { getWeatherByCity } from "../api/WeatherApi.ts";
 
 interface WeatherData {
     humidity: number;
@@ -14,41 +15,22 @@ interface WeatherData {
 
 const Weather = () => {
     const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+    const isFetchingRef = useRef(false); // Запобігання зайвим запитам
 
-    const iconByCode = async (code: string) => {
-        return `https://openweathermap.org/img/wn/${code}.png`;
-    };
-
-    const searchByCity = async (city: string) => {
-        if (!city){
-            alert("Please, enter city name!");
-            return;
-        }
+    const searchByCity = useCallback(async (city: string) => {
+        if (isFetchingRef.current) return; // Уникнення подвійних запитів
+        isFetchingRef.current = true;
 
         try {
-            const API_URL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${import.meta.env.VITE_APP_ID}`;
-            const response = await fetch(API_URL);
-            const data = await response.json();
-            if (!response.ok){
-                alert(data.message);
-                return;
-            }
-            console.log(data);
-
-            const icon = await iconByCode(data.weather[0].icon);
-
-            setWeatherData({
-                humidity: data.main.humidity,
-                windSpeed: data.wind.speed,
-                temperature: Math.floor(data.main.temp),
-                location: data.name,
-                icon: icon
-            });
-        } catch (e) {
+            const weather = await getWeatherByCity(city);
+            setWeatherData(weather);
+        } catch (error) {
+            alert("Error during fetch a data." + error);
             setWeatherData(null);
-            console.log("Error during fetch a data." + e);
+        } finally {
+            isFetchingRef.current = false;
         }
-    };
+    }, []);
 
     return (
         <div className="weather">
