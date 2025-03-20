@@ -2,28 +2,29 @@ import Image from "./Image.tsx";
 import processedImages from "../utils/imageLoader.ts";
 
 interface Props {
-    currentWeatherSrc: string;
-    temperature: string;
+    humidity: number;
+    windSpeed: number;
+    temperature: number;
     location: string;
-    className?: string
+    icon: string;
 
 }
 
-const DetailsView = ({currentWeatherSrc, temperature, location}: Props) => {
+const DetailsView = ({humidity, windSpeed, location,temperature,icon}: Props) => {
     return (
         <>
-            <Image src={currentWeatherSrc} alt="" className="weather-icon"/>
+            <Image src={icon} alt="" className="weather-icon"/>
             <p className="temperature">{temperature}&deg;C</p>
             <p className="location">{location}</p>
             <div className="weather-data">
                 <div className="col">
                     <img src={processedImages["humidity"]} alt=""/>
-                    <p>91 %</p>
+                    <p>{humidity} %</p>
                     <span>Humidity</span>
                 </div>
                 <div className="col">
                     <img src={processedImages["wind"]} alt=""/>
-                    <p>3.6 Km/h</p>
+                    <p>{windSpeed} Km/h</p>
                     <span>Wind speed</span>
                 </div>
             </div>
