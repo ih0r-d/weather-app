@@ -1,0 +1,35 @@
+name: Manual Deploy to Vercel
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy to Vercel
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🛠 Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: 📦 Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: "npm"
+
+      - name: 🔨 Install Dependencies
+        run: npm install
+
+      - name: 🛠 Set Environment Variables in Vercel
+        run: |
+          npm install -g vercel
+          echo "VITE_APP_ID=${{ secrets.VITE_APP_ID }}" | vercel env add VITE_APP_ID production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: ⚡ Build Project with Vite
+        run: npm run build
+        env:
+          VITE_APP_ID: ${{ secrets.VITE_APP_ID }}
+
+      - name: 🚀 Deploy to Vercel
+        run: vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
