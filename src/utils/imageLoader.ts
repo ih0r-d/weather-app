@@ -7,7 +7,6 @@ for (const path in images) {
     const imageModule = images[path] as { default?: string } | undefined;
 
     if (fileName && imageModule?.default) {
-        console.log(fileName)
         processedImages[fileName] = imageModule.default;
     }
 }
